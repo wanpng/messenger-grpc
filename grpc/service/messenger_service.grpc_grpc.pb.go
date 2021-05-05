@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 type MessengerServiceClient interface {
 	CreateMessage(ctx context.Context, in *CreateMessageRequest, opts ...grpc.CallOption) (*CreateMessageResponse, error)
 	AddMessage(ctx context.Context, in *AddMessageRequest, opts ...grpc.CallOption) (*AddMessageResponse, error)
+	AddMessages(ctx context.Context, in *AddMessageRequest, opts ...grpc.CallOption) (*AddMessageResponse, error)
 }
 
 type messengerServiceClient struct {
@@ -48,12 +49,22 @@ func (c *messengerServiceClient) AddMessage(ctx context.Context, in *AddMessageR
 	return out, nil
 }
 
+func (c *messengerServiceClient) AddMessages(ctx context.Context, in *AddMessageRequest, opts ...grpc.CallOption) (*AddMessageResponse, error) {
+	out := new(AddMessageResponse)
+	err := c.cc.Invoke(ctx, "/protos.service.MessengerService/AddMessages", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MessengerServiceServer is the server API for MessengerService service.
 // All implementations must embed UnimplementedMessengerServiceServer
 // for forward compatibility
 type MessengerServiceServer interface {
 	CreateMessage(context.Context, *CreateMessageRequest) (*CreateMessageResponse, error)
 	AddMessage(context.Context, *AddMessageRequest) (*AddMessageResponse, error)
+	AddMessages(context.Context, *AddMessageRequest) (*AddMessageResponse, error)
 	mustEmbedUnimplementedMessengerServiceServer()
 }
 
@@ -66,6 +77,9 @@ func (UnimplementedMessengerServiceServer) CreateMessage(context.Context, *Creat
 }
 func (UnimplementedMessengerServiceServer) AddMessage(context.Context, *AddMessageRequest) (*AddMessageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddMessage not implemented")
+}
+func (UnimplementedMessengerServiceServer) AddMessages(context.Context, *AddMessageRequest) (*AddMessageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddMessages not implemented")
 }
 func (UnimplementedMessengerServiceServer) mustEmbedUnimplementedMessengerServiceServer() {}
 
@@ -116,6 +130,24 @@ func _MessengerService_AddMessage_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MessengerService_AddMessages_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddMessageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MessengerServiceServer).AddMessages(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protos.service.MessengerService/AddMessages",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MessengerServiceServer).AddMessages(ctx, req.(*AddMessageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MessengerService_ServiceDesc is the grpc.ServiceDesc for MessengerService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -130,6 +162,10 @@ var MessengerService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddMessage",
 			Handler:    _MessengerService_AddMessage_Handler,
+		},
+		{
+			MethodName: "AddMessages",
+			Handler:    _MessengerService_AddMessages_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

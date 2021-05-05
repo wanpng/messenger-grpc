@@ -12,6 +12,7 @@ enum CreatedByType {
 service MessengerService {
     rpc CreateMessage(CreateMessageRequest) returns (CreateMessageResponse);
     rpc AddMessage(AddMessageRequest) returns (AddMessageResponse);
+    rpc AddMessages(AddMessageRequest) returns (AddMessageResponse);
 }
 
 message CreateMessageRequest {
@@ -46,4 +47,13 @@ message AddMessageRequest {
 message AddMessageResponse {
     int32 status = 1;
     string message_id = 2;
+}
+
+message AddMessagesRequest {
+    repeated AddMessageRequest add_message_requests = 1;
+}
+
+message AddMessagesResponse {
+    int32 status = 1;
+    repeated string message_ids = 2;
 }
