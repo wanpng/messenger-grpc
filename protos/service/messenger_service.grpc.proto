@@ -35,7 +35,7 @@ message CreateMessageResponse {
 }
 
 message AddMessageRequest {
-    string room_id = 1;
+    string job_id = 1;
     string user_id = 2;
     string message = 3;
     int32 application_status_id = 4;
