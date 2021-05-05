@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package protos.service;
+
+option go_package = "github.com/wanpng/messenger-grpc/grpc/service";
+
+enum CreatedByType {
+    JOBSEEKER = 0;
+    EMPLOYER = 1;
+}
+
+service MessengerService {
+    rpc CreateMessage(CreateMessageRequest) returns (CreateMessageResponse);
+    rpc AddMessage(AddMessageRequest) returns (AddMessageResponse);
+}
+
+message CreateMessageRequest {
+    string employer_id = 1;
+    string user_id = 2;
+    string job_id = 3;
+    string jobseeker_id = 4;
+    string message = 5;
+    int32 application_status_id = 6;
+    string application_status =  7;
+    CreatedByType created_by_type = 8;
+}
+
+message CreateMessageResponse {
+    int32 status = 1;
+    string room_id = 2;
+    string employer_object_id = 3;
+    string jobseeker_object_id = 4;
+    string message_object_id = 5;
+}
+
+message AddMessageRequest {
+    string room_id = 1;
+    string user_id = 2;
+    string message = 3;
+    string application_status_id = 4;
+    string application_status = 5;
+    string created_by = 6;
+    CreatedByType createdByType = 7;
+}
+
+message AddMessageResponse {
+    int32 status = 1;
+    string message_id = 2;
+}
