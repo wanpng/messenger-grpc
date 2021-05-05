@@ -38,7 +38,7 @@ message AddMessageRequest {
     string room_id = 1;
     string user_id = 2;
     string message = 3;
-    string application_status_id = 4;
+    int32 application_status_id = 4;
     string application_status = 5;
     string created_by = 6;
     CreatedByType createdByType = 7;
