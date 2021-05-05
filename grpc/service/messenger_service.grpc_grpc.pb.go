@@ -20,7 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 type MessengerServiceClient interface {
 	CreateMessage(ctx context.Context, in *CreateMessageRequest, opts ...grpc.CallOption) (*CreateMessageResponse, error)
 	AddMessage(ctx context.Context, in *AddMessageRequest, opts ...grpc.CallOption) (*AddMessageResponse, error)
-	AddMessages(ctx context.Context, in *AddMessageRequest, opts ...grpc.CallOption) (*AddMessageResponse, error)
+	AddMessages(ctx context.Context, in *AddMessagesRequest, opts ...grpc.CallOption) (*AddMessagesResponse, error)
 }
 
 type messengerServiceClient struct {
@@ -49,8 +49,8 @@ func (c *messengerServiceClient) AddMessage(ctx context.Context, in *AddMessageR
 	return out, nil
 }
 
-func (c *messengerServiceClient) AddMessages(ctx context.Context, in *AddMessageRequest, opts ...grpc.CallOption) (*AddMessageResponse, error) {
-	out := new(AddMessageResponse)
+func (c *messengerServiceClient) AddMessages(ctx context.Context, in *AddMessagesRequest, opts ...grpc.CallOption) (*AddMessagesResponse, error) {
+	out := new(AddMessagesResponse)
 	err := c.cc.Invoke(ctx, "/protos.service.MessengerService/AddMessages", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -64,7 +64,7 @@ func (c *messengerServiceClient) AddMessages(ctx context.Context, in *AddMessage
 type MessengerServiceServer interface {
 	CreateMessage(context.Context, *CreateMessageRequest) (*CreateMessageResponse, error)
 	AddMessage(context.Context, *AddMessageRequest) (*AddMessageResponse, error)
-	AddMessages(context.Context, *AddMessageRequest) (*AddMessageResponse, error)
+	AddMessages(context.Context, *AddMessagesRequest) (*AddMessagesResponse, error)
 	mustEmbedUnimplementedMessengerServiceServer()
 }
 
@@ -78,7 +78,7 @@ func (UnimplementedMessengerServiceServer) CreateMessage(context.Context, *Creat
 func (UnimplementedMessengerServiceServer) AddMessage(context.Context, *AddMessageRequest) (*AddMessageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddMessage not implemented")
 }
-func (UnimplementedMessengerServiceServer) AddMessages(context.Context, *AddMessageRequest) (*AddMessageResponse, error) {
+func (UnimplementedMessengerServiceServer) AddMessages(context.Context, *AddMessagesRequest) (*AddMessagesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddMessages not implemented")
 }
 func (UnimplementedMessengerServiceServer) mustEmbedUnimplementedMessengerServiceServer() {}
@@ -131,7 +131,7 @@ func _MessengerService_AddMessage_Handler(srv interface{}, ctx context.Context, 
 }
 
 func _MessengerService_AddMessages_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddMessageRequest)
+	in := new(AddMessagesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -143,7 +143,7 @@ func _MessengerService_AddMessages_Handler(srv interface{}, ctx context.Context,
 		FullMethod: "/protos.service.MessengerService/AddMessages",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MessengerServiceServer).AddMessages(ctx, req.(*AddMessageRequest))
+		return srv.(MessengerServiceServer).AddMessages(ctx, req.(*AddMessagesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
