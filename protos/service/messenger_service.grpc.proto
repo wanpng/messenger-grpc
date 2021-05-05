@@ -40,6 +40,7 @@ message AddMessageRequest {
     string message = 3;
     int32 application_status_id = 4;
     string application_status = 5;
+    string created_by = 6;
     CreatedByType createdByType = 7;
 }
 
