@@ -13,6 +13,7 @@ service MessengerService {
     rpc CreateMessage(CreateMessageRequest) returns (CreateMessageResponse);
     rpc AddMessage(AddMessageRequest) returns (AddMessageResponse);
     rpc AddMessages(AddMessagesRequest) returns (AddMessagesResponse);
+    rpc GetRoomId(GetRoomIdRequest) returns (GetRoomIdResponse);
 }
 
 message CreateMessageRequest {
@@ -57,4 +58,13 @@ message AddMessagesRequest {
 message AddMessagesResponse {
     int32 status = 1;
     repeated string message_ids = 2;
+}
+
+message GetRoomIdRequest {
+    string job_id = 1;
+    string jobseeker_id = 2;
+}
+
+message GetRoomIdResponse {
+    string room_id = 1;
 }

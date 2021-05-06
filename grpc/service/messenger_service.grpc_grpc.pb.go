@@ -21,6 +21,7 @@ type MessengerServiceClient interface {
 	CreateMessage(ctx context.Context, in *CreateMessageRequest, opts ...grpc.CallOption) (*CreateMessageResponse, error)
 	AddMessage(ctx context.Context, in *AddMessageRequest, opts ...grpc.CallOption) (*AddMessageResponse, error)
 	AddMessages(ctx context.Context, in *AddMessagesRequest, opts ...grpc.CallOption) (*AddMessagesResponse, error)
+	GetRoomId(ctx context.Context, in *GetRoomIdRequest, opts ...grpc.CallOption) (*GetRoomIdResponse, error)
 }
 
 type messengerServiceClient struct {
@@ -58,6 +59,15 @@ func (c *messengerServiceClient) AddMessages(ctx context.Context, in *AddMessage
 	return out, nil
 }
 
+func (c *messengerServiceClient) GetRoomId(ctx context.Context, in *GetRoomIdRequest, opts ...grpc.CallOption) (*GetRoomIdResponse, error) {
+	out := new(GetRoomIdResponse)
+	err := c.cc.Invoke(ctx, "/protos.service.MessengerService/GetRoomId", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MessengerServiceServer is the server API for MessengerService service.
 // All implementations must embed UnimplementedMessengerServiceServer
 // for forward compatibility
@@ -65,6 +75,7 @@ type MessengerServiceServer interface {
 	CreateMessage(context.Context, *CreateMessageRequest) (*CreateMessageResponse, error)
 	AddMessage(context.Context, *AddMessageRequest) (*AddMessageResponse, error)
 	AddMessages(context.Context, *AddMessagesRequest) (*AddMessagesResponse, error)
+	GetRoomId(context.Context, *GetRoomIdRequest) (*GetRoomIdResponse, error)
 	mustEmbedUnimplementedMessengerServiceServer()
 }
 
@@ -80,6 +91,9 @@ func (UnimplementedMessengerServiceServer) AddMessage(context.Context, *AddMessa
 }
 func (UnimplementedMessengerServiceServer) AddMessages(context.Context, *AddMessagesRequest) (*AddMessagesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddMessages not implemented")
+}
+func (UnimplementedMessengerServiceServer) GetRoomId(context.Context, *GetRoomIdRequest) (*GetRoomIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRoomId not implemented")
 }
 func (UnimplementedMessengerServiceServer) mustEmbedUnimplementedMessengerServiceServer() {}
 
@@ -148,6 +162,24 @@ func _MessengerService_AddMessages_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MessengerService_GetRoomId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRoomIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MessengerServiceServer).GetRoomId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protos.service.MessengerService/GetRoomId",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MessengerServiceServer).GetRoomId(ctx, req.(*GetRoomIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MessengerService_ServiceDesc is the grpc.ServiceDesc for MessengerService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -166,6 +198,10 @@ var MessengerService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddMessages",
 			Handler:    _MessengerService_AddMessages_Handler,
+		},
+		{
+			MethodName: "GetRoomId",
+			Handler:    _MessengerService_GetRoomId_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
