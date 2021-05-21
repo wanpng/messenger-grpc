@@ -68,3 +68,7 @@ message GetRoomIdRequest {
 message GetRoomIdResponse {
     string room_id = 1;
 }
+
+message DeleteRoomId {
+    string room_id = 1;
+}
