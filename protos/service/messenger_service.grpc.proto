@@ -44,6 +44,8 @@ message AddMessageRequest {
     string application_status = 6;
     string created_by = 7;
     CreatedByType createdByType = 8;
+    int32 previous_application_status_id = 9;
+    string previous_application_status = 10;
 }
 
 message AddMessageResponse {
