@@ -14,6 +14,7 @@ service MessengerService {
     rpc AddMessage(AddMessageRequest) returns (AddMessageResponse);
     rpc AddMessages(AddMessagesRequest) returns (AddMessagesResponse);
     rpc GetRoomId(GetRoomIdRequest) returns (GetRoomIdResponse);
+    rpc AddInterviewScheduleMessage(AddInterviewScheduleMessageRequest) returns (AddMessageResponse);
 }
 
 message CreateMessageRequest {
@@ -46,6 +47,25 @@ message AddMessageRequest {
     CreatedByType createdByType = 8;
     int32 previous_application_status_id = 9;
     string previous_application_status = 10;
+}
+
+message AddInterviewScheduleMessageRequest {
+    string job_id = 1;
+    string user_id = 2;
+    string jobseeker_id = 3;
+    string message = 4;
+    string created_by = 5;
+    InterviewSchedule interview_schedule = 6;
+    CreatedByType createdByType = 7;
+}
+
+message InterviewSchedule {
+    string interview_schedule_id = 1;
+    int64 interview_date = 2;
+    int64 start_time = 3;
+    int64 end_time = 4;
+    int32 status_id = 5;
+    string status = 6;
 }
 
 message AddMessageResponse {
