@@ -66,6 +66,7 @@ message InterviewSchedule {
     int64 end_time = 4;
     int32 status_id = 5;
     string status = 6;
+    string interview_title = 7;
 }
 
 message AddMessageResponse {
